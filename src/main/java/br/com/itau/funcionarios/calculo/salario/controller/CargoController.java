@@ -1,7 +1,13 @@
 package br.com.itau.funcionarios.calculo.salario.controller;
 
+import br.com.itau.funcionarios.calculo.salario.dto.CargoSaveRequestDTO;
+import br.com.itau.funcionarios.calculo.salario.dto.CargoSaveResponseDTO;
 import br.com.itau.funcionarios.calculo.salario.entity.Cargo;
+import br.com.itau.funcionarios.calculo.salario.repository.CargoRepository;
+import br.com.itau.funcionarios.calculo.salario.service.CargoService;
+import br.com.itau.funcionarios.calculo.salario.service.impl.CargoServiceImpl;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,18 +20,31 @@ import java.util.List;
 @RequestMapping ("/cargos")
 public class CargoController {
 
+    private CargoService cargoService;
+
+    public CargoController(CargoService cargoService){
+        this.cargoService = cargoService;
+
+    }
+
+
     @PostMapping
-    public ResponseEntity<Cargo> save (@RequestBody Cargo cargoResponse){
-        //SALVAR NO BANCO DE DADOS
-        log.info(cargoResponse.toString());
+    public ResponseEntity<CargoSaveResponseDTO> save (@RequestBody CargoSaveRequestDTO cargoSaveRequestDTO){
+
+        log.info(cargoSaveRequestDTO.toString());
 
         Cargo cargo = new Cargo();
-        cargo.setIdCargo(1111L);
-        cargo.setDescricacaoCargo(cargoResponse.getDescricacaoCargo());
-        cargo.setNomeCargo(cargoResponse.getNomeCargo());
-        cargo.setSalarioBase(cargoResponse.getSalarioBase());
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(cargo);
+        cargo.setDescricacaoCargo(cargoSaveRequestDTO.getDescricacaoCargo());
+        cargo.setNomeCargo(cargoSaveRequestDTO.getNomeCargo());
+        cargo.setSalarioBase(cargoSaveRequestDTO.getSalarioBase());
+
+        cargo = cargoService.save(cargo);
+
+        CargoSaveResponseDTO cargoSaveResponseDTO = new CargoSaveResponseDTO();
+        cargoSaveResponseDTO.setId(cargo.getIdCargo());
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(cargoSaveResponseDTO);
     }
 
     @DeleteMapping
@@ -39,7 +58,7 @@ public class CargoController {
     public ResponseEntity<Cargo> findById (@PathVariable(value= "idCargo") long id){
         //BUSCAR NO BANCO DE DADOS
         Cargo cargo = new Cargo();
-        cargo.setIdCargo(1111);
+        //cargo.setIdCargo(1111);
         cargo.setNomeCargo("TESTE");
         cargo.setDescricacaoCargo("teste");
 
