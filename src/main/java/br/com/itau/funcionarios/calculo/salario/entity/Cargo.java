@@ -7,6 +7,7 @@ import lombok.ToString;
 import org.springframework.boot.autoconfigure.web.WebProperties;
 
 import java.math.BigDecimal;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -21,7 +22,7 @@ public class Cargo {
     private String descricacaoCargo;
     private BigDecimal salarioBase;
 
-    @OneToOne(mappedBy = "cargo")
-    private Funcionario funcionario;
+    @OneToMany(mappedBy = "cargo" , cascade = CascadeType.ALL)
+    private Set<Funcionario> funcionarios;
 
 }

@@ -22,7 +22,7 @@ public class Funcionario {
 
     private BigDecimal valorBonus;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn (name ="cargo_id", referencedColumnName ="idCargo")
     private Cargo cargo;
 

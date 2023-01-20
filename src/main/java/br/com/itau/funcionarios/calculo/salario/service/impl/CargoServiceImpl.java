@@ -5,6 +5,7 @@ import br.com.itau.funcionarios.calculo.salario.repository.CargoRepository;
 import br.com.itau.funcionarios.calculo.salario.service.CargoService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -24,5 +25,21 @@ public class CargoServiceImpl implements CargoService {
     @Override
     public Optional<Cargo> findById(Long id) {
         return cargoRepository.findById(id);
+    }
+
+    @Override
+    public void delete(Long idCargo) {
+        cargoRepository.deleteById(idCargo);
+    }
+
+    @Override
+    public Cargo update(Cargo cargo) {
+        return cargoRepository.save(cargo);
+    }
+
+
+    @Override
+    public List<Cargo> findAll() {
+        return cargoRepository.findAll();
     }
 }
