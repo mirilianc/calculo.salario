@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -48,9 +49,14 @@ public class CargoController {
     }
 
     @DeleteMapping
-    public ResponseEntity <String> delete (@PathVariable long id){
+    public ResponseEntity <String> delete (@PathVariable long id) {
 
+        Optional<Cargo> cargo = cargoService.findById(id);
+        if (cargo.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
 
+     //   cargoService.delete(id);
         return ResponseEntity.ok().build();
     }
 
