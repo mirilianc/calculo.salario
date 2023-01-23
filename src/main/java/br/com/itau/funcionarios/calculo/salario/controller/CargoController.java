@@ -1,5 +1,6 @@
 package br.com.itau.funcionarios.calculo.salario.controller;
 
+import br.com.itau.funcionarios.calculo.salario.dto.CargoResponseDTO;
 import br.com.itau.funcionarios.calculo.salario.dto.CargoSaveRequestDTO;
 import br.com.itau.funcionarios.calculo.salario.dto.CargoSaveResponseDTO;
 import br.com.itau.funcionarios.calculo.salario.entity.Cargo;
@@ -56,26 +57,47 @@ public class CargoController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
-     //   cargoService.delete(id);
+       cargoService.delete(id);
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping(value = "/{idcargo}")
-    public ResponseEntity<Cargo> findById (@PathVariable(value= "idCargo") long id){
-        //BUSCAR NO BANCO DE DADOS
-        Cargo cargo = new Cargo();
-        //cargo.setIdCargo(1111);
-        cargo.setNomeCargo("TESTE");
-        cargo.setDescricacaoCargo("teste");
+    @GetMapping(value = "/{idCargo}")
+    public ResponseEntity<CargoResponseDTO> findById (@PathVariable(value= "idCargo") Long id){
 
-        return ResponseEntity.ok().build();
+        Optional<Cargo> cargo = cargoService.findById(id);
+
+        if (cargo.isPresent()) {
+            CargoResponseDTO cargoResponseDTO = new CargoResponseDTO();
+
+            cargoResponseDTO.setNomeCargo(cargo.get().getNomeCargo());
+            cargoResponseDTO.setIdCargo(cargo.get().getIdCargo());
+            cargoResponseDTO.setDescricacaoCargo(cargo.get().getDescricacaoCargo());
+            cargoResponseDTO.setSalarioBase(cargo.get().getSalarioBase());
+            cargoResponseDTO.setFuncionarios(cargo.get().getFuncionarios());
+
+            return ResponseEntity.ok(cargoResponseDTO);
+
+        }
+        else {
+
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+
+        }
+
     }
 
 
     @GetMapping
-    public ResponseEntity <List<Cargo>> findAll(){
-            //SELECT NO BANCO DE DADOS E POPULAR OBJETO PARA APRESENTAR
+    public ResponseEntity <List<CargoResponseDTO>> findAll(){
 
+        List<Cargo> cargo = cargoService.findAll();
+
+        CargoResponseDTO cargoResponseDTO = new CargoResponseDTO();
+
+        cargoResponseDTO.setNomeCargo(cargoResponseDTO.getNomeCargo());
+
+        //SELECT NO BANCO DE DADOS E POPULAR OBJETO PARA APRESENTAR
+        // ajustar o return apos implementar o metodo
         return ResponseEntity.ok(new ArrayList<>());
     }
 

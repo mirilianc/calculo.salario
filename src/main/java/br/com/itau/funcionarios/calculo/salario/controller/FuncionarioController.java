@@ -7,6 +7,8 @@ import br.com.itau.funcionarios.calculo.salario.dto.FuncionarioSaveResponseDTO;
 import br.com.itau.funcionarios.calculo.salario.entity.Cargo;
 import br.com.itau.funcionarios.calculo.salario.entity.Funcionario;
 import br.com.itau.funcionarios.calculo.salario.service.CargoService;
+import br.com.itau.funcionarios.calculo.salario.service.FuncionarioService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,13 +16,14 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
+@Slf4j
+@RestController
 @RequestMapping ("/funcionarios")
 public class FuncionarioController {
 
-    private CargoService funcionarioService;
+    private FuncionarioService funcionarioService;
 
-    public FuncionarioController(CargoService cargoService){
+    public FuncionarioController(FuncionarioService funcionarioService){
         this.funcionarioService = funcionarioService;
 
     }
@@ -55,7 +58,7 @@ public class FuncionarioController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
-        //   funcionarioService.delete(id);
+        funcionarioService.delete(id);
         return ResponseEntity.ok().build();
     }
 
@@ -65,8 +68,8 @@ public class FuncionarioController {
         Funcionario funcionario = new Funcionario();
 
 
-        funcionario.setMatricula();
-        funcionario.setNome();
+        //funcionario.setMatricula();
+        //funcionario.setNome();
 
 
 
