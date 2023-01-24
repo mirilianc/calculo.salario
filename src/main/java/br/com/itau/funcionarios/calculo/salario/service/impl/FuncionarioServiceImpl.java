@@ -25,8 +25,8 @@ public class FuncionarioServiceImpl implements FuncionarioService {
     }
 
     @Override
-    public Optional<Funcionario> findById(Long id) {
-        return funcionarioRepository.findById(id);
+    public Optional<Funcionario> findById(Long matricula) {
+        return funcionarioRepository.findById(matricula);
     }
 
     @Override

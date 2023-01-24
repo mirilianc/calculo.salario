@@ -11,7 +11,7 @@ public interface FuncionarioService {
 
     Funcionario save (Funcionario funcionario);
 
-    Optional<Funcionario> findById (Long id);
+    Optional<Funcionario> findById (Long matricula);
 
     void delete (Long id);
 
