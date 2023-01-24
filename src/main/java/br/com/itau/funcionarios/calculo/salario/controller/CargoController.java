@@ -49,8 +49,8 @@ public class CargoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(cargoSaveResponseDTO);
     }
 
-    @DeleteMapping
-    public ResponseEntity <String> delete (@PathVariable long id) {
+    @DeleteMapping(value = "/{idCargo}")
+    public ResponseEntity <String> delete (@PathVariable (value = "idCargo") Long id) {
 
         Optional<Cargo> cargo = cargoService.findById(id);
         if (cargo.isEmpty()) {

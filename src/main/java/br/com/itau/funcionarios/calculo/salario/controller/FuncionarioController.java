@@ -1,11 +1,9 @@
 package br.com.itau.funcionarios.calculo.salario.controller;
 
-import br.com.itau.funcionarios.calculo.salario.dto.CargoSaveRequestDTO;
-import br.com.itau.funcionarios.calculo.salario.dto.CargoSaveResponseDTO;
-import br.com.itau.funcionarios.calculo.salario.dto.FuncionarioSaveRequestDTO;
-import br.com.itau.funcionarios.calculo.salario.dto.FuncionarioSaveResponseDTO;
+import br.com.itau.funcionarios.calculo.salario.dto.*;
 import br.com.itau.funcionarios.calculo.salario.entity.Cargo;
 import br.com.itau.funcionarios.calculo.salario.entity.Funcionario;
+import br.com.itau.funcionarios.calculo.salario.entity.enums.SexoEnum;
 import br.com.itau.funcionarios.calculo.salario.service.CargoService;
 import br.com.itau.funcionarios.calculo.salario.service.FuncionarioService;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -50,8 +49,9 @@ public class FuncionarioController {
 
     }
 
-    @DeleteMapping
-    public ResponseEntity <String> delete (@PathVariable long id) {
+    @DeleteMapping (value = "/{matricula}")
+    public ResponseEntity <String> delete (@PathVariable (value = "matricula") Long id) {
+
 
         Optional<Funcionario> funcionario = funcionarioService.findById(id);
         if (funcionario.isEmpty()) {
@@ -63,17 +63,28 @@ public class FuncionarioController {
     }
 
     @GetMapping(value = "/{matricula}")
-    public ResponseEntity<Funcionario> findById (@PathVariable(value= "matricula") long id){
+    public ResponseEntity<FuncionarioResponseDTO> findById (@PathVariable(value= "matricula") Long id){
         //BUSCAR NO BANCO DE DADOS
-        Funcionario funcionario = new Funcionario();
+        Optional<Funcionario> funcionario = funcionarioService.findById(id);
+
+        if(funcionario.isPresent()) {
+
+            FuncionarioResponseDTO funcionarioResponseDTO = new FuncionarioResponseDTO();
+
+            funcionarioResponseDTO.setMatricula(funcionario.get().getMatricula());
+            funcionarioResponseDTO.setNome(funcionario.get().getNome());
+            funcionarioResponseDTO.setSexo(funcionario.get().getSexo());
+            funcionarioResponseDTO.setCargo(funcionario.get().getCargo());
+            funcionarioResponseDTO.setEndereco(funcionario.get().getEndereco());
+            funcionarioResponseDTO.setDtNasc(funcionario.get().getDtNasc());
+            funcionarioResponseDTO.setValorBonus(funcionario.get().getValorBonus());
 
 
-        //funcionario.setMatricula();
-        //funcionario.setNome();
-
-
-
-        return ResponseEntity.ok().build();
+            return ResponseEntity.ok(funcionarioResponseDTO);
+        }
+        else{
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
 
