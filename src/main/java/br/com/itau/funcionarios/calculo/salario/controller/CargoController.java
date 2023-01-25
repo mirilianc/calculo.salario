@@ -50,19 +50,19 @@ public class CargoController {
     }
 
     @DeleteMapping(value = "/{idCargo}")
-    public ResponseEntity <String> delete (@PathVariable (value = "idCargo") Long id) {
+    public ResponseEntity <String> delete (@PathVariable  Long idCargo) {
 
-        Optional<Cargo> cargo = cargoService.findById(id);
+        Optional<Cargo> cargo = cargoService.findById(idCargo);
         if (cargo.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
-       cargoService.delete(id);
+       cargoService.delete(idCargo);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping(value = "/{idCargo}")
-    public ResponseEntity<CargoResponseDTO> findById (@PathVariable(value= "idCargo") Long id){
+    public ResponseEntity<CargoResponseDTO> getById (@PathVariable(value= "idCargo") Long id){
 
         Optional<Cargo> cargo = cargoService.findById(id);
 
