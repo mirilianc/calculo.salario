@@ -1,18 +1,17 @@
 package br.com.itau.funcionarios.calculo.salario.controller;
 
-import br.com.itau.funcionarios.calculo.salario.dto.CargoResponseDTO;
-import br.com.itau.funcionarios.calculo.salario.dto.CargoSaveRequestDTO;
-import br.com.itau.funcionarios.calculo.salario.dto.CargoSaveResponseDTO;
+import br.com.itau.funcionarios.calculo.salario.dto.response.CargoResponseDTO;
+import br.com.itau.funcionarios.calculo.salario.dto.request.CargoSaveRequestDTO;
+import br.com.itau.funcionarios.calculo.salario.dto.response.CargoResponseListDTO;
+import br.com.itau.funcionarios.calculo.salario.dto.response.CargoSaveResponseDTO;
 import br.com.itau.funcionarios.calculo.salario.entity.Cargo;
-import br.com.itau.funcionarios.calculo.salario.repository.CargoRepository;
 import br.com.itau.funcionarios.calculo.salario.service.CargoService;
-import br.com.itau.funcionarios.calculo.salario.service.impl.CargoServiceImpl;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -37,7 +36,7 @@ public class CargoController {
 
         Cargo cargo = new Cargo();
 
-        cargo.setDescricacaoCargo(cargoSaveRequestDTO.getDescricacaoCargo());
+        cargo.setDescricaoCargo(cargoSaveRequestDTO.getDescricaoCargo());
         cargo.setNomeCargo(cargoSaveRequestDTO.getNomeCargo());
         cargo.setSalarioBase(cargoSaveRequestDTO.getSalarioBase());
 
@@ -71,7 +70,7 @@ public class CargoController {
 
             cargoResponseDTO.setNomeCargo(cargo.get().getNomeCargo());
             cargoResponseDTO.setIdCargo(cargo.get().getIdCargo());
-            cargoResponseDTO.setDescricacaoCargo(cargo.get().getDescricacaoCargo());
+            cargoResponseDTO.setDescricaoCargo(cargo.get().getDescricaoCargo());
             cargoResponseDTO.setSalarioBase(cargo.get().getSalarioBase());
             cargoResponseDTO.setFuncionarios(cargo.get().getFuncionarios());
 
@@ -81,11 +80,9 @@ public class CargoController {
         else {
 
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-
         }
 
     }
-
 
     @GetMapping
     public ResponseEntity <List<CargoResponseDTO>> findAll(){
@@ -99,6 +96,40 @@ public class CargoController {
         //SELECT NO BANCO DE DADOS E POPULAR OBJETO PARA APRESENTAR
         // ajustar o return apos implementar o metodo
         return ResponseEntity.ok(new ArrayList<>());
+    }
+
+    @PutMapping("/{idCargo}")
+    public ResponseEntity update(@PathVariable Long idCargo, @RequestBody CargoSaveRequestDTO cargoRequest) {
+
+        Optional<Cargo> cargo = cargoService.findById(idCargo);
+
+        if (cargo.isPresent()) {
+            cargo.get().setSalarioBase(cargoRequest.getSalarioBase());
+            cargo.get().setDescricaoCargo(cargoRequest.getDescricaoCargo());
+            cargo.get().setNomeCargo(cargoRequest.getNomeCargo());
+
+            cargoService.save(cargo.get());
+            return ResponseEntity.status(HttpStatus.ACCEPTED).build();
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+    }
+
+    @PatchMapping("/{idCargo}/{salarioBase}")
+    public ResponseEntity updateSalario(@PathVariable Long idCargo, @PathVariable BigDecimal salarioBase) {
+        //atualiza salarioBase
+        log.info("idCargo: {} salarioBase: {}", idCargo, salarioBase);
+
+        Optional<Cargo> cargo = cargoService.findById(idCargo);
+
+        if (cargo.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } else {
+            cargo.get().setSalarioBase(salarioBase);
+            cargoService.save(cargo.get());
+            return ResponseEntity.ok().build();
+        }
     }
 
 }
