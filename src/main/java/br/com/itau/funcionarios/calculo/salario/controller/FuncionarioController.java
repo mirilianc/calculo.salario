@@ -1,6 +1,8 @@
 package br.com.itau.funcionarios.calculo.salario.controller;
 
-import br.com.itau.funcionarios.calculo.salario.dto.*;
+import br.com.itau.funcionarios.calculo.salario.dto.request.FuncionarioSaveRequestDTO;
+import br.com.itau.funcionarios.calculo.salario.dto.response.FuncionarioResponseDTO;
+import br.com.itau.funcionarios.calculo.salario.dto.response.FuncionarioSaveResponseDTO;
 import br.com.itau.funcionarios.calculo.salario.entity.Cargo;
 import br.com.itau.funcionarios.calculo.salario.entity.Funcionario;
 import br.com.itau.funcionarios.calculo.salario.service.CargoService;
@@ -39,7 +41,7 @@ public class FuncionarioController {
         Optional<Cargo> cargo = cargoService.findById(funcionarioSaveRequestDTO.getFuncionarioCargoRequestDTO().getIdCargo());
 
         //PRECISA AJUSTAR - CODIGO TA FEIO
-        cargo2.setDescricacaoCargo(cargo.get().getDescricacaoCargo());
+        cargo2.setDescricaoCargo(cargo.get().getDescricaoCargo());
         cargo2.setNomeCargo(cargo.get().getNomeCargo());
         cargo2.setSalarioBase(cargo.get().getSalarioBase());
 
@@ -89,7 +91,7 @@ public class FuncionarioController {
             Cargo cargo = new Cargo();
 
             cargo.setNomeCargo(funcionario.get().getCargo().getNomeCargo());
-            cargo.setDescricacaoCargo(funcionario.get().getCargo().getDescricacaoCargo());
+            cargo.setDescricaoCargo(funcionario.get().getCargo().getDescricaoCargo());
             cargo.setIdCargo(funcionario.get().getCargo().getIdCargo());
             cargo.setSalarioBase(funcionario.get().getCargo().getSalarioBase());
 

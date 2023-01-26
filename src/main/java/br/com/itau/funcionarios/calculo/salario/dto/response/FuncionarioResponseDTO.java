@@ -1,4 +1,4 @@
-package br.com.itau.funcionarios.calculo.salario.dto;
+package br.com.itau.funcionarios.calculo.salario.dto.response;
 
 import br.com.itau.funcionarios.calculo.salario.entity.Cargo;
 import br.com.itau.funcionarios.calculo.salario.entity.enums.SexoEnum;
@@ -7,17 +7,14 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 import java.math.BigDecimal;
 
 @Getter
 @Setter
-@ToString
-public class FuncionarioSaveRequestDTO {
+public class FuncionarioResponseDTO {
 
-
-
+    private Long matricula;
     private String nome;
     private String dtNasc;
     private SexoEnum sexo;
@@ -25,6 +22,5 @@ public class FuncionarioSaveRequestDTO {
 
     private BigDecimal valorBonus;
 
-    private FuncionarioCargoRequestDTO funcionarioCargoRequestDTO;
-
+    private Cargo cargo;
 }

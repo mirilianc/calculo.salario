@@ -1,4 +1,4 @@
-package br.com.itau.funcionarios.calculo.salario.dto;
+package br.com.itau.funcionarios.calculo.salario.dto.request;
 
 import lombok.Getter;
 import lombok.Setter;
