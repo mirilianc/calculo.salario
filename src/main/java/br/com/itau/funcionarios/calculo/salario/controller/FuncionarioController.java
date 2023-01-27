@@ -36,24 +36,16 @@ public class FuncionarioController {
 
         Funcionario funcionario = new Funcionario();
 
-        Cargo cargo2 = new Cargo();
-
-        Optional<Cargo> cargo = cargoService.findById(funcionarioSaveRequestDTO.getFuncionarioCargoRequestDTO().getIdCargo());
-
-        //PRECISA AJUSTAR - CODIGO TA FEIO
-        cargo2.setDescricaoCargo(cargo.get().getDescricaoCargo());
-        cargo2.setNomeCargo(cargo.get().getNomeCargo());
-        cargo2.setSalarioBase(cargo.get().getSalarioBase());
-
         funcionario.setNome(funcionarioSaveRequestDTO.getNome());
-
         funcionario.setNome(funcionarioSaveRequestDTO.getNome());
         funcionario.setSexo(funcionarioSaveRequestDTO.getSexo());
         funcionario.setDtNasc(funcionarioSaveRequestDTO.getDtNasc());
         funcionario.setEndereco(funcionarioSaveRequestDTO.getEndereco());
         funcionario.setValorBonus(funcionarioSaveRequestDTO.getValorBonus());
 
-        funcionario.setCargo(cargo2);
+        funcionario.setCargo(new Cargo());
+
+        funcionario.getCargo().setIdCargo(funcionarioSaveRequestDTO.getFuncionarioCargoRequestDTO().getIdCargo());
 
         log.info(funcionario.toString());
 

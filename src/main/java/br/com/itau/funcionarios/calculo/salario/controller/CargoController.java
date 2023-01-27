@@ -4,7 +4,9 @@ import br.com.itau.funcionarios.calculo.salario.dto.response.CargoResponseDTO;
 import br.com.itau.funcionarios.calculo.salario.dto.request.CargoSaveRequestDTO;
 import br.com.itau.funcionarios.calculo.salario.dto.response.CargoResponseListDTO;
 import br.com.itau.funcionarios.calculo.salario.dto.response.CargoSaveResponseDTO;
+import br.com.itau.funcionarios.calculo.salario.dto.response.FuncionarioListaResponseDTO;
 import br.com.itau.funcionarios.calculo.salario.entity.Cargo;
+import br.com.itau.funcionarios.calculo.salario.entity.Funcionario;
 import br.com.itau.funcionarios.calculo.salario.service.CargoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -15,6 +17,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Slf4j
 @RestController
@@ -68,11 +71,14 @@ public class CargoController {
         if (cargo.isPresent()) {
             CargoResponseDTO cargoResponseDTO = new CargoResponseDTO();
 
+
             cargoResponseDTO.setNomeCargo(cargo.get().getNomeCargo());
             cargoResponseDTO.setIdCargo(cargo.get().getIdCargo());
             cargoResponseDTO.setDescricaoCargo(cargo.get().getDescricaoCargo());
             cargoResponseDTO.setSalarioBase(cargo.get().getSalarioBase());
-            cargoResponseDTO.setFuncionarios(cargo.get().getFuncionarios());
+
+            // cargoResponseDTO.setFuncionarios(cargo.get().getFuncionarios(FuncionarioListaResponseDTO));
+
 
             return ResponseEntity.ok(cargoResponseDTO);
 
