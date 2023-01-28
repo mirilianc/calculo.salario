@@ -7,7 +7,6 @@ import java.util.Set;
 
 @Getter
 @Setter
-@ToString
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
@@ -20,7 +19,7 @@ public class Cargo {
     private String descricaoCargo;
     private BigDecimal salarioBase;
 
-    @OneToMany(mappedBy = "cargo" , cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "cargo" )
     private Set<Funcionario> funcionarios;
 
 }
