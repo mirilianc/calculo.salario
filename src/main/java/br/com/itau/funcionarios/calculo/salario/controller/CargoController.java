@@ -14,10 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Slf4j
 @RestController
@@ -77,7 +74,15 @@ public class CargoController {
             cargoResponseDTO.setDescricaoCargo(cargo.get().getDescricaoCargo());
             cargoResponseDTO.setSalarioBase(cargo.get().getSalarioBase());
 
-            // cargoResponseDTO.setFuncionarios(cargo.get().getFuncionarios(FuncionarioListaResponseDTO));
+           cargoResponseDTO.setFuncionarios(new HashSet<>());
+           for (Funcionario funcionario: cargo.get().getFuncionarios()){
+               FuncionarioListaResponseDTO funcionarioListaResponseDTO = new FuncionarioListaResponseDTO();
+               funcionarioListaResponseDTO.setNome(funcionario.getNome());
+               funcionarioListaResponseDTO.setMatricula(funcionario.getMatricula());
+
+               cargoResponseDTO.getFuncionarios().add(funcionarioListaResponseDTO);
+           }
+
 
 
             return ResponseEntity.ok(cargoResponseDTO);
@@ -93,15 +98,34 @@ public class CargoController {
     @GetMapping
     public ResponseEntity <List<CargoResponseDTO>> findAll(){
 
-        List<Cargo> cargo = cargoService.findAll();
+        List<Cargo> cargos = cargoService.findAll();
+        List<CargoResponseDTO> cargoResponseDTOS = new ArrayList<>();
+        for (Cargo cargo: cargos) {
 
-        CargoResponseDTO cargoResponseDTO = new CargoResponseDTO();
+            CargoResponseDTO cargoResponseDTO = new CargoResponseDTO();
 
-        cargoResponseDTO.setNomeCargo(cargoResponseDTO.getNomeCargo());
+            cargoResponseDTO.setNomeCargo(cargo.getNomeCargo());
+            cargoResponseDTO.setIdCargo(cargo.getIdCargo());
+            cargoResponseDTO.setDescricaoCargo(cargo.getDescricaoCargo());
+            cargoResponseDTO.setSalarioBase(cargo.getSalarioBase());
 
-        //SELECT NO BANCO DE DADOS E POPULAR OBJETO PARA APRESENTAR
-        // ajustar o return apos implementar o metodo
-        return ResponseEntity.ok(new ArrayList<>());
+            cargoResponseDTO.setFuncionarios(new HashSet<>());
+            for (Funcionario funcionario: cargo.getFuncionarios()){
+                FuncionarioListaResponseDTO funcionarioListaResponseDTO = new FuncionarioListaResponseDTO();
+                funcionarioListaResponseDTO.setNome(funcionario.getNome());
+                funcionarioListaResponseDTO.setMatricula(funcionario.getMatricula());
+                funcionarioListaResponseDTO.setSexo(funcionario.getSexo());
+                funcionarioListaResponseDTO.setEndereco(funcionario.getEndereco());
+                funcionarioListaResponseDTO.setDtNasc(funcionario.getDtNasc());
+                funcionarioListaResponseDTO.setValorBonus(funcionario.getValorBonus());
+
+                cargoResponseDTO.getFuncionarios().add(funcionarioListaResponseDTO);
+            }
+           cargoResponseDTOS.add(cargoResponseDTO);
+        }
+
+
+        return ResponseEntity.ok(cargoResponseDTOS);
     }
 
     @PutMapping("/{idCargo}")

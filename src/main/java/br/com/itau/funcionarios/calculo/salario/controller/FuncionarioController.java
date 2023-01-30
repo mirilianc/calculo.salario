@@ -1,17 +1,22 @@
 package br.com.itau.funcionarios.calculo.salario.controller;
 
 import br.com.itau.funcionarios.calculo.salario.dto.request.FuncionarioSaveRequestDTO;
+import br.com.itau.funcionarios.calculo.salario.dto.response.CargoFuncResponseDTO;
+import br.com.itau.funcionarios.calculo.salario.dto.response.FuncionarioBonusResponseDTO;
 import br.com.itau.funcionarios.calculo.salario.dto.response.FuncionarioResponseDTO;
 import br.com.itau.funcionarios.calculo.salario.dto.response.FuncionarioSaveResponseDTO;
 import br.com.itau.funcionarios.calculo.salario.entity.Cargo;
 import br.com.itau.funcionarios.calculo.salario.entity.Funcionario;
+import br.com.itau.funcionarios.calculo.salario.repository.CargoRepository;
 import br.com.itau.funcionarios.calculo.salario.service.CargoService;
 import br.com.itau.funcionarios.calculo.salario.service.FuncionarioService;
+import br.com.itau.funcionarios.calculo.salario.service.SalarioService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -19,13 +24,19 @@ import java.util.Optional;
 @RestController
 @RequestMapping ("/funcionarios")
 public class FuncionarioController {
+    private final CargoRepository cargoRepository;
 
     private FuncionarioService funcionarioService;
     private CargoService cargoService;
 
-    public FuncionarioController(FuncionarioService funcionarioService, CargoService cargoService){
+    private SalarioService salarioService;
+
+    public FuncionarioController(FuncionarioService funcionarioService, CargoService cargoService,
+                                 CargoRepository cargoRepository, SalarioService salarioService){
         this.funcionarioService = funcionarioService;
         this.cargoService = cargoService;
+        this.cargoRepository = cargoRepository;
+        this.salarioService = salarioService;
     }
 
 
@@ -45,7 +56,7 @@ public class FuncionarioController {
 
         funcionario.setCargo(new Cargo());
 
-        funcionario.getCargo().setIdCargo(funcionarioSaveRequestDTO.getFuncionarioCargoRequestDTO().getIdCargo());
+        funcionario.getCargo().setIdCargo(funcionarioSaveRequestDTO.getCargo().getIdCargo());
 
         log.info(funcionario.toString());
 
@@ -80,20 +91,21 @@ public class FuncionarioController {
         if(funcionario.isPresent()) {
 
             FuncionarioResponseDTO funcionarioResponseDTO = new FuncionarioResponseDTO();
-            Cargo cargo = new Cargo();
+            CargoFuncResponseDTO cargoFuncResponseDTO = new CargoFuncResponseDTO();
 
-            cargo.setNomeCargo(funcionario.get().getCargo().getNomeCargo());
-            cargo.setDescricaoCargo(funcionario.get().getCargo().getDescricaoCargo());
-            cargo.setIdCargo(funcionario.get().getCargo().getIdCargo());
-            cargo.setSalarioBase(funcionario.get().getCargo().getSalarioBase());
+            cargoFuncResponseDTO.setNomeCargo(funcionario.get().getCargo().getNomeCargo());
+            cargoFuncResponseDTO.setDescricaoCargo(funcionario.get().getCargo().getDescricaoCargo());
+            cargoFuncResponseDTO.setIdCargo(funcionario.get().getCargo().getIdCargo());
+            cargoFuncResponseDTO.setSalarioBase(funcionario.get().getCargo().getSalarioBase());
 
             funcionarioResponseDTO.setMatricula(funcionario.get().getMatricula());
             funcionarioResponseDTO.setNome(funcionario.get().getNome());
             funcionarioResponseDTO.setSexo(funcionario.get().getSexo());
-            funcionarioResponseDTO.setCargo(cargo);
+            funcionarioResponseDTO.setCargo(cargoFuncResponseDTO);
             funcionarioResponseDTO.setEndereco(funcionario.get().getEndereco());
             funcionarioResponseDTO.setDtNasc(funcionario.get().getDtNasc());
             funcionarioResponseDTO.setValorBonus(funcionario.get().getValorBonus());
+
 
 
             return ResponseEntity.ok(funcionarioResponseDTO);
@@ -102,6 +114,45 @@ public class FuncionarioController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
+
+
+    @GetMapping(value = "/calculosalario/{matricula}")
+
+    public ResponseEntity<FuncionarioBonusResponseDTO> calculoSalario (@PathVariable(value= "matricula") Long matricula){
+
+        Optional<Funcionario> funcionario = funcionarioService.findById(matricula);
+
+        if(funcionario.isPresent()) {
+
+            FuncionarioBonusResponseDTO funcionarioBonusResponseDTO = new FuncionarioBonusResponseDTO();
+            CargoFuncResponseDTO cargoFuncResponseDTO = new CargoFuncResponseDTO();
+
+            cargoFuncResponseDTO.setNomeCargo(funcionario.get().getCargo().getNomeCargo());
+            cargoFuncResponseDTO.setDescricaoCargo(funcionario.get().getCargo().getDescricaoCargo());
+            cargoFuncResponseDTO.setIdCargo(funcionario.get().getCargo().getIdCargo());
+            cargoFuncResponseDTO.setSalarioBase(funcionario.get().getCargo().getSalarioBase());
+
+            funcionarioBonusResponseDTO.setMatricula(funcionario.get().getMatricula());
+            funcionarioBonusResponseDTO.setNome(funcionario.get().getNome());
+            funcionarioBonusResponseDTO.setSexo(funcionario.get().getSexo());
+            funcionarioBonusResponseDTO.setCargo(cargoFuncResponseDTO);
+            funcionarioBonusResponseDTO.setEndereco(funcionario.get().getEndereco());
+            funcionarioBonusResponseDTO.setDtNasc(funcionario.get().getDtNasc());
+            funcionarioBonusResponseDTO.setValorBonus(funcionario.get().getValorBonus());
+
+            BigDecimal valorFinal = salarioService.calculoSalario(matricula);
+
+            funcionarioBonusResponseDTO.setSalarioFinal(valorFinal);
+
+            return ResponseEntity.ok(funcionarioBonusResponseDTO);
+        }
+        else{
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+
+
 
 
     @GetMapping
