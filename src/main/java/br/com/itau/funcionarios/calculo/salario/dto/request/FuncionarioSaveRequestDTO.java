@@ -19,6 +19,6 @@ public class FuncionarioSaveRequestDTO {
 
     private BigDecimal valorBonus;
 
-    private FuncionarioCargoRequestDTO funcionarioCargoRequestDTO;
+    private FuncionarioCargoRequestDTO cargo;
 
 }

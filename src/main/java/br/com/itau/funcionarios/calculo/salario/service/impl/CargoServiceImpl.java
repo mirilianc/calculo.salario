@@ -29,7 +29,12 @@ public class CargoServiceImpl implements CargoService {
 
     @Override
     public void delete(Long idCargo) {
-        cargoRepository.deleteById(idCargo);
+        Optional<Cargo> cargo = findById(idCargo);
+        if (cargo.get().getFuncionarios().isEmpty()){
+            cargoRepository.deleteById(idCargo);
+        } else {
+            throw new RuntimeException("Existe funcionario para esse cargo");
+        }
     }
 
     @Override
