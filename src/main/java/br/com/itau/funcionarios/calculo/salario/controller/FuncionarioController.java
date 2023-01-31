@@ -83,7 +83,7 @@ public class FuncionarioController {
 
     @GetMapping(value = "/{matricula}")
     public ResponseEntity<FuncionarioResponseDTO> findById(@PathVariable(value = "matricula") Long matricula) {
-        //BUSCAR NO BANCO DE DADOS
+
         Optional<Funcionario> funcionario = funcionarioService.findById(matricula);
 
         if (funcionario.isPresent()) {
@@ -173,6 +173,5 @@ public class FuncionarioController {
             funcionarioResponseDTOS.add(funcionarioResponseDTO);
         }
         return ResponseEntity.ok(funcionarioResponseDTOS);
-     //teste
     }
 }

@@ -152,7 +152,7 @@ public class CargoController {
 
     @PatchMapping("/{idCargo}/{salarioBase}")
     public ResponseEntity updateSalario(@PathVariable Long idCargo, @PathVariable BigDecimal salarioBase) {
-        //atualiza salarioBase
+
         log.info("idCargo: {} salarioBase: {}", idCargo, salarioBase);
 
         Optional<Cargo> cargo = cargoService.findById(idCargo);
