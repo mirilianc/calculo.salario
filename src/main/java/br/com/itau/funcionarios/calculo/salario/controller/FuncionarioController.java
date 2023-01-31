@@ -8,6 +8,7 @@ import br.com.itau.funcionarios.calculo.salario.repository.CargoRepository;
 import br.com.itau.funcionarios.calculo.salario.service.CargoService;
 import br.com.itau.funcionarios.calculo.salario.service.FuncionarioService;
 import br.com.itau.funcionarios.calculo.salario.service.SalarioService;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 @Slf4j
@@ -39,7 +39,7 @@ public class FuncionarioController {
 
 
     @PostMapping
-    public ResponseEntity<FuncionarioSaveResponseDTO> save(@RequestBody FuncionarioSaveRequestDTO funcionarioSaveRequestDTO) {
+    public ResponseEntity<FuncionarioSaveResponseDTO> save(@RequestBody @Valid FuncionarioSaveRequestDTO funcionarioSaveRequestDTO) {
 
         log.info(funcionarioSaveRequestDTO.toString());
 
