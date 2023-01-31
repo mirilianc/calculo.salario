@@ -8,6 +8,7 @@ import br.com.itau.funcionarios.calculo.salario.dto.response.FuncionarioListaRes
 import br.com.itau.funcionarios.calculo.salario.entity.Cargo;
 import br.com.itau.funcionarios.calculo.salario.entity.Funcionario;
 import br.com.itau.funcionarios.calculo.salario.service.CargoService;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +31,7 @@ public class CargoController {
 
 
     @PostMapping
-    public ResponseEntity<CargoSaveResponseDTO> save (@RequestBody CargoSaveRequestDTO cargoSaveRequestDTO){
+    public ResponseEntity<CargoSaveResponseDTO> save (@RequestBody @Valid CargoSaveRequestDTO cargoSaveRequestDTO){
 
         log.info(cargoSaveRequestDTO.toString());
 
@@ -132,7 +133,7 @@ public class CargoController {
     }
 
     @PutMapping("/{idCargo}")
-    public ResponseEntity update(@PathVariable Long idCargo, @RequestBody CargoSaveRequestDTO cargoRequest) {
+    public ResponseEntity update(@PathVariable Long idCargo, @RequestBody @Valid CargoSaveRequestDTO cargoRequest) {
 
         Optional<Cargo> cargo = cargoService.findById(idCargo);
 

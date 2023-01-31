@@ -15,13 +15,13 @@ import java.math.BigDecimal;
 @ToString
 public class CargoSaveRequestDTO {
 
-    @NotNull @NotBlank
+    @NotNull @NotBlank(message="Cargo é Obrigatório!")
     private String nomeCargo;
 
     @NotNull
     private String descricaoCargo;
 
-    @NotNull @DecimalMin(value = "0.1")
+    @NotNull @DecimalMin(value = "0.1", message="SalárioBase é Obrigatório!")
     private BigDecimal salarioBase;
 
 }
