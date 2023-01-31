@@ -68,7 +68,6 @@ public class CargoController {
         if (cargo.isPresent()) {
             CargoResponseDTO cargoResponseDTO = new CargoResponseDTO();
 
-
             cargoResponseDTO.setNomeCargo(cargo.get().getNomeCargo());
             cargoResponseDTO.setIdCargo(cargo.get().getIdCargo());
             cargoResponseDTO.setDescricaoCargo(cargo.get().getDescricaoCargo());
@@ -79,6 +78,10 @@ public class CargoController {
                FuncionarioListaResponseDTO funcionarioListaResponseDTO = new FuncionarioListaResponseDTO();
                funcionarioListaResponseDTO.setNome(funcionario.getNome());
                funcionarioListaResponseDTO.setMatricula(funcionario.getMatricula());
+               funcionarioListaResponseDTO.setSexo(funcionario.getSexo());
+               funcionarioListaResponseDTO.setEndereco(funcionario.getEndereco());
+               funcionarioListaResponseDTO.setDtNasc(funcionario.getDtNasc());
+               funcionarioListaResponseDTO.setValorBonus(funcionario.getValorBonus());
 
                cargoResponseDTO.getFuncionarios().add(funcionarioListaResponseDTO);
            }
